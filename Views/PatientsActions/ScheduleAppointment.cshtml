@@ -1,0 +1,31 @@
+﻿@model IEnumerable<DoctorListViewModel>
+
+<h2>Schedule Appointment</h2>
+
+@using (Html.BeginForm("CreateAppointment", "PatientsActions", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="DoctorID">Select a Doctor:</label>
+        <select name="DoctorID" class="form-control">
+            @foreach (var doctor in Model)
+            {
+                <option value="@doctor.DoctorID">
+                    @doctor.FullName - @doctor.Specialization
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="AppointmentDate">Select Appointment Date:</label>
+        <input type="datetime-local" name="AppointmentDate" class="form-control" required
+               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+    </div>
+
+    <div class="form-group">
+        <label for="Notes">Notes:</label>
+        <textarea name="Notes" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Schedule</button>
+}

@@ -1,0 +1,34 @@
+﻿@model List<PatientMedicalRecord.Models.MedicalRecord>
+
+<h1>Medical Records</h1>
+
+@if (Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Record ID</th>
+                <th>Date of Visit</th>
+                <th>Diagnosis</th>
+                <th>Treatment</th>
+                <th>Prescription</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.RecordId</td>
+                    <td>@record.DateOfVisit</td>
+                    <td>@record.Diagnosis</td>
+                    <td>@record.Treatment</td>
+                    <td>@record.Prescription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No medical records found.</p>
+}
