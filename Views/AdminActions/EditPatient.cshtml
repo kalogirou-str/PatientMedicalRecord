@@ -1,0 +1,70 @@
+﻿@model EditPatientViewModel
+
+<h2>Edit Patient</h2>
+
+@using (Html.BeginForm("EditPatient", "AdminActions", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+
+    @Html.HiddenFor(model => model.Username) <!-- This is needed to identify the patient being edited -->
+
+    <div class="form-group">
+        <label>First Name</label>
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", Value = Model.FirstName })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="form-group">
+        <label>Last Name</label>
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", Value = Model.LastName })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Password)
+    </div>
+
+    <div class="form-group">
+        <label>Medical Record Number</label>
+        @Html.TextBoxFor(model => model.MedicalRecordNumber, new { @class = "form-control", Value = Model.MedicalRecordNumber })
+        @Html.ValidationMessageFor(model => model.MedicalRecordNumber)
+    </div>
+
+    <div class="form-group">
+        <label>Date of Birth</label>
+        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", type = "date", Value = Model.DateOfBirth })
+        @Html.ValidationMessageFor(model => model.DateOfBirth)
+    </div>
+
+    <div class="form-group">
+        <label>Gender</label>
+        <div>
+            @Html.RadioButtonFor(model => model.Gender, "Male", new { @id = "Gender_Male" }) Male
+            @Html.RadioButtonFor(model => model.Gender, "Female", new { @id = "Gender_Female" }) Female
+            @Html.RadioButtonFor(model => model.Gender, "Other", new { @id = "Gender_Other" }) Other
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label>Email</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", Value = Model.Email })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", Value = Model.Phone })
+        @Html.ValidationMessageFor(model => model.Phone)
+    </div>
+
+    <div class="form-group">
+        <label>Address</label>
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", Value = Model.Address })
+        @Html.ValidationMessageFor(model => model.Address)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Patient</button>
+}

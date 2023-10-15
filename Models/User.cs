@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PatientMedicalRecord.Models;
 
-[Index("Username", Name = "UQ__Users__536C85E430EF5711", IsUnique = true)]
+[Index("Username", Name = "UQ__Users__536C85E4F30E2F89", IsUnique = true)]
 public partial class User
 {
     [Key]

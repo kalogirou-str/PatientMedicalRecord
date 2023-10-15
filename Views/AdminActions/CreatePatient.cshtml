@@ -1,0 +1,72 @@
+﻿@model AdminCreatePatientViewModel
+
+<h2>Create New Patient</h2>
+
+@using (Html.BeginForm("CreatePatient", "AdminActions", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username)
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Username)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password)
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Password)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MedicalRecordNumber)
+        @Html.TextBoxFor(model => model.MedicalRecordNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.MedicalRecordNumber)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DateOfBirth)
+        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(model => model.DateOfBirth)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone)
+        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Phone)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address)
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Gender)
+        <div>
+            @Html.RadioButtonFor(model => model.Gender, "Male") <label for="Gender_Male">Male</label>
+            @Html.RadioButtonFor(model => model.Gender, "Female") <label for="Gender_Female">Female</label>
+            @Html.RadioButtonFor(model => model.Gender, "Other") <label for="Gender_Other">Other</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Patient</button>
+}

@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Hello, @ViewBag.User.FirstName @ViewBag.User.LastName</h1>
+
+    <!-- Add specific admin details here -->
+    <p>User Type: Admin</p>
+
+    <ul>
+        <li><a href="@Url.Action("PatientList", "AdminActions")">View Patients</a></li>
+        <li><a href="@Url.Action("ViewDoctors", "AdminActions")">View Doctors</a></li>
+        <li><a href="@Url.Action("CreatePatient", "AdminActions")">Create Patient</a></li>
+        <li><a href="@Url.Action("CreateDoctor", "AdminActions")">Create Doctor</a></li>
+        <!-- Add more action links as needed -->
+    </ul>
+
+    <!-- Rest of your HTML content here -->
+</body>
+</html>

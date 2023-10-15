@@ -35,62 +35,62 @@ public partial class MedicalRecordsDBContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admins__719FE4E82C65165C");
+            entity.HasKey(e => e.AdminId).HasName("PK__Admins__719FE4E82D97A655");
 
             entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Admins)
                 .HasPrincipalKey(p => p.Username)
                 .HasForeignKey(d => d.Username)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Admins__Username__47DBAE45");
+                .HasConstraintName("FK__Admins__Username__70DDC3D8");
         });
 
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => new { e.PatientId, e.DoctorId, e.AppointmentDate }).HasName("PK__Appointm__FB3EAFC7D61C0A9F");
+            entity.HasKey(e => new { e.PatientId, e.DoctorId, e.AppointmentDate }).HasName("PK__Appointm__FB3EAFC70F094A65");
 
             entity.HasOne(d => d.Doctor).WithMany(p => p.Appointments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Appointme__Docto__4BAC3F29");
+                .HasConstraintName("FK__Appointme__Docto__6A30C649");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Appointments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Appointme__Patie__4AB81AF0");
+                .HasConstraintName("FK__Appointme__Patie__693CA210");
         });
 
         modelBuilder.Entity<Doctor>(entity =>
         {
-            entity.HasKey(e => e.DoctorId).HasName("PK__Doctors__2DC00EDF8825592F");
+            entity.HasKey(e => e.DoctorId).HasName("PK__Doctors__2DC00EDF5A767AD4");
 
             entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Doctors)
                 .HasPrincipalKey(p => p.Username)
                 .HasForeignKey(d => d.Username)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Doctors__Usernam__3A81B327");
+                .HasConstraintName("FK__Doctors__Usernam__6383C8BA");
         });
 
         modelBuilder.Entity<MedicalRecord>(entity =>
         {
-            entity.HasKey(e => e.RecordId).HasName("PK__MedicalR__FBDF78C989A58F2F");
+            entity.HasKey(e => e.RecordId).HasName("PK__MedicalR__FBDF78C912BE5B0A");
 
-            entity.HasOne(d => d.Doctor).WithMany(p => p.MedicalRecords).HasConstraintName("FK__MedicalRe__Docto__44FF419A");
+            entity.HasOne(d => d.Doctor).WithMany(p => p.MedicalRecords).HasConstraintName("FK__MedicalRe__Docto__6E01572D");
 
-            entity.HasOne(d => d.Patient).WithMany(p => p.MedicalRecords).HasConstraintName("FK__MedicalRe__Patie__440B1D61");
+            entity.HasOne(d => d.Patient).WithMany(p => p.MedicalRecords).HasConstraintName("FK__MedicalRe__Patie__6D0D32F4");
         });
 
         modelBuilder.Entity<Patient>(entity =>
         {
-            entity.HasKey(e => e.PatientId).HasName("PK__Patient__970EC34608521FBA");
+            entity.HasKey(e => e.PatientId).HasName("PK__Patient__970EC346E1A6A795");
 
             entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Patients)
                 .HasPrincipalKey(p => p.Username)
                 .HasForeignKey(d => d.Username)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Patient__Usernam__3D5E1FD2");
+                .HasConstraintName("FK__Patient__Usernam__66603565");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACBC3CF7A2");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC45CBE536");
         });
 
         OnModelCreatingPartial(modelBuilder);

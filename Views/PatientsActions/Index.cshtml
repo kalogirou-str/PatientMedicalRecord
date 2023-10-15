@@ -5,16 +5,14 @@
 </head>
 <body>
     <h1>Hello, @ViewBag.User.FirstName @ViewBag.User.LastName</h1>
+    <p>Medical Record Number: @ViewBag.Patient.MedicalRecordNumber</p>
+    <p>Date of Birth: @ViewBag.Patient.DateOfBirth</p>
 
-    <!-- Add specific admin details here -->
-    <p>User Type: Admin</p>
-
+    <!-- Add links to various actions -->
     <ul>
-        <li><a href="@Url.Action("ViewPatients", "AdminActions")">View Patients</a></li>
-        <li><a href="@Url.Action("ViewDoctors", "AdminActions")">View Doctors</a></li>
-        <li><a href="@Url.Action("CreatePatient", "AdminActions")">Create Patient</a></li>
-        <li><a href="@Url.Action("CreateDoctor", "AdminActions")">Create Doctor</a></li>
-        <!-- Add more action links as needed -->
+        <li><a href="@Url.Action("Appointments", "PatientsActions")">View Appointments</a></li>
+        <li><a href="@Url.Action("MedicalRecords", "PatientsActions")">View Medical Records</a></li>
+        <li><a href="@Url.Action("ScheduleAppointment", "PatientsActions")">Schedule Appointment</a></li>
     </ul>
 
     <!-- Rest of your HTML content here -->

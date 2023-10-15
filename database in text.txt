@@ -1,0 +1,63 @@
+-- Create the Users table with a unique constraint on Username
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY NOT NULL,
+    Username NVARCHAR(50) NOT NULL UNIQUE, -- Define Username as UNIQUE
+    Password NVARCHAR(100) NOT NULL,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NULL,
+    Phone NVARCHAR(20) NULL,
+    Address NVARCHAR(255) NULL,
+    UserType NVARCHAR(20) NOT NULL -- Add UserType column
+);
+
+-- Create the Doctors table with a foreign key to Users
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY NOT NULL,
+    Specialization NVARCHAR(50) NULL,
+    LicenseNumber NVARCHAR(20) NULL,
+    Username NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (Username) REFERENCES Users(Username)
+);
+
+-- Create the Patient table with a foreign key to Users
+CREATE TABLE Patient (
+    PatientID INT PRIMARY KEY NOT NULL,
+    MedicalRecordNumber NVARCHAR(20) NULL,
+    DateOfBirth DATE NULL,
+    Gender NVARCHAR(10) NULL,
+    Username NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (Username) REFERENCES Users(Username)
+);
+
+CREATE TABLE Appointments (
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATETIME,
+    Status NVARCHAR(20) NULL,
+    Notes NVARCHAR(255) NULL,
+    PRIMARY KEY (PatientID, DoctorID, AppointmentDate),
+    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+
+-- Create the MedicalRecords table with foreign keys to Patient and Doctors
+CREATE TABLE MedicalRecords (
+    RecordID INT PRIMARY KEY NOT NULL,
+    PatientID INT,
+    DoctorID INT,
+    DateOfVisit DATE NULL,
+    Diagnosis NVARCHAR(255) NULL,
+    Treatment NVARCHAR(255) NULL,
+    Prescription NVARCHAR(255) NULL,
+    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create the Admins table with a foreign key to Users
+CREATE TABLE Admins (
+    AdminID INT PRIMARY KEY NOT NULL,
+    Username NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (Username) REFERENCES Users(Username)
+);
