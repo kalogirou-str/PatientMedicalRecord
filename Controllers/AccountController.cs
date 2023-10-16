@@ -66,7 +66,7 @@ namespace PatientMedicalRecord.Controllers
                 {
                     // if no match is found, return an error message
                     TempData["Message"] = "Incorrect username or password";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Login");
                 }
             }
         }

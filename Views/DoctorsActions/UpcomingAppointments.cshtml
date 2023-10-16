@@ -1,0 +1,45 @@
+﻿@model List<UpcomingAppointmentViewModel>
+
+<h2>Upcoming Appointments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Appointment Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Medical Record Number</th>
+            <th>Patient Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.AppointmentDate.ToShortDateString() @appointment.AppointmentDate.ToShortTimeString()</td>
+                <td><span style="color: @GetStatusColor(appointment.Status)">@appointment.Status</span></td>
+                <td><span style="color: #0066cc">@appointment.Notes</span></td>
+                <td>@appointment.MedicalRecordNumber</td>
+                <td>@appointment.FirstName @appointment.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    // Function to get status-specific color
+    string GetStatusColor(string status)
+    {
+        switch (status)
+        {
+            case "Pending":
+                return "orange";
+            case "Confirmed":
+                return "green";
+            case "Cancelled":
+                return "red";
+            default:
+                return "black";
+        }
+    }
+}

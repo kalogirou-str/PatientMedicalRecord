@@ -1,0 +1,27 @@
+﻿@model List<MedicalRecord>
+
+<h2>Medical Records</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date of Visit</th>
+            <th>Diagnosis</th>
+            <th>Treatment</th>
+            <th>Prescription</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.DateOfVisit</td>
+                <td>@record.Diagnosis</td>
+                <td>@record.Treatment</td>
+                <td>@record.Prescription</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="DoctorsActions" asp-action="SearchPatients">Back to Patient List</a>

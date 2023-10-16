@@ -1,5 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Hello, @ViewBag.User.FirstName @ViewBag.User.LastName</h1>
+
+    <!-- Add links to various actions -->
+    <ul>
+        <li><a href="@Url.Action("SearchPatients", "DoctorsActions")">Search Patients</a></li>
+        <li><a href="@Url.Action("UpcomingAppointments", "DoctorsActions")">Upcoming Appointments</a></li>
+        <li><a href="@Url.Action("CreateMedicalRecord", "DoctorsActions")">Create Medical Record</a></li>
+    </ul>
+
+    <!-- Rest of your HTML content here -->
+</body>
+</html>
