@@ -1,0 +1,41 @@
+﻿@model List<DoctorListFromPatientViewModel>
+
+<h2>Doctor List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Doctor ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Specialization</th>
+            <th>License Number</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.DoctorID</td>
+                <td>@doctor.FirstName</td>
+                <td>@doctor.LastName</td>
+                <td>@doctor.Specialization</td>
+                <td>@doctor.LicenseNumber</td>
+                <td>@doctor.Username</td>
+                <td>@doctor.Email</td>
+                <td>@doctor.Phone</td>
+                <td>@doctor.Address</td>
+                <td>
+                    @Html.ActionLink("Edit Doctor", "EditDoctor", new { id = doctor.DoctorID })
+                    |
+                    @Html.ActionLink("Delete Doctor", "DeleteDoctor", new { id = doctor.DoctorID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

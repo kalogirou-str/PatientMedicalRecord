@@ -150,7 +150,7 @@ namespace PatientMedicalRecord.Controllers
                     }
                     else
                     {
-                        appointment.Status = "Scheduled";
+                        appointment.Status = "Pending";
                     }
 
                     // The database will automatically generate the AppointmentID

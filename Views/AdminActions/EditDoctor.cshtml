@@ -1,0 +1,54 @@
+﻿@model DoctorEditViewModel
+
+<h2>Edit Doctor</h2>
+
+@using (Html.BeginForm("EditDoctor", "AdminActions", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+
+    @Html.HiddenFor(model => model.DoctorID)
+    @Html.HiddenFor(model => model.Username)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Specialization)
+        @Html.TextBoxFor(model => model.Specialization, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Specialization)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LicenseNumber)
+        @Html.TextBoxFor(model => model.LicenseNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LicenseNumber)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone)
+        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Phone)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address)
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+}

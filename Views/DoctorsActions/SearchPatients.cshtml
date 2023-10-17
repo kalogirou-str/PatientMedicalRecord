@@ -1,11 +1,21 @@
 ﻿@model string
 
-<h2>Search Patients</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Patients</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Search Patients</h2>
 
-<form asp-action="SearchResults" method="post">
-    <div class="form-group">
-        <label for="searchInput">Search by Medical Record Number:</label>
-        <input type="text" class="form-control" id="searchInput" name="searchInput" value="@Model">
+        <form asp-action="SearchResults" method="post">
+            <div class="form-group">
+                <label for="searchInput">Search by Medical Record Number:</label>
+                <input type="text" class="form-control" id="searchInput" name="searchInput" value="@Model">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+</body>
+</html>

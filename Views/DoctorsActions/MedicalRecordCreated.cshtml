@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Medical Record Created";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Record Created</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-image: url('~/BackgroundImages/doctor_background_image.jpg'); /* Specify the background image */
+            background-size: cover; /* Cover the entire view */
+            background-position: center; /* Center the image */
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.7); /* Add a semi-transparent white background to make content more readable */
+            padding: 20px;
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h2>Medical Record Created</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <p>Your medical record has been successfully created.</p>
+
+        <a asp-controller="DoctorsActions" asp-action="Index">Back to Dashboard</a>
+    </div>
+</body>
+</html>

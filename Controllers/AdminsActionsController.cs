@@ -114,46 +114,60 @@ namespace PatientMedicalRecord.Controllers
             return View(patients);
         }
 
-        public IActionResult Delete(string username)
+        public IActionResult DeletePatient(int id)
         {
-            // Retrieve the user and patient records by username
-            var user = _context.Users.FirstOrDefault(u => u.Username == username);
-            var patient = _context.Patients.FirstOrDefault(p => p.Username == username);
+            // Find the patient by ID
+            var patient = _context.Patients.FirstOrDefault(p => p.PatientId == id);
 
-            if (user == null || patient == null)
+            if (patient == null)
             {
-                // Handle not found user or patient
                 return NotFound();
             }
 
-            // Delete the user and patient records
-            // Save changes to the database
+            // Delete the associated appointments and medical records
+            var appointments = _context.Appointments.Where(a => a.PatientId == id).ToList();
+            var medicalRecords = _context.MedicalRecords.Where(mr => mr.PatientId == id).ToList();
+
+            _context.Appointments.RemoveRange(appointments);
+            _context.MedicalRecords.RemoveRange(medicalRecords);
+
+            // Remove the patient from the Patients table
+            _context.Patients.Remove(patient);
+
+            // Save the changes
+            _context.SaveChanges();
 
             return RedirectToAction("PatientList");
         }
 
-        public IActionResult EditPatient(string username)
+        [HttpGet]
+        public IActionResult EditPatient(int id)
         {
-            // Retrieve the user and patient records by username
-            var user = _context.Users.FirstOrDefault(u => u.Username == username);
-            var patient = _context.Patients.FirstOrDefault(p => p.Username == username);
+            // Find the patient by ID
+            var patient = _context.Patients.FirstOrDefault(p => p.PatientId == id);
 
-            if (user == null || patient == null)
+            if (patient == null)
             {
-                // Handle not found user or patient
                 return NotFound();
             }
 
-            // Create an edit view model and populate it with user and patient data
-            var editModel = new EditPatientViewModel
+            // Find the associated user by username
+            var user = _context.Users.FirstOrDefault(u => u.Username == patient.Username);
+
+            if (user == null)
             {
-                Username = user.Username,
+                return NotFound();
+            }
+
+            var editModel = new PatientEditViewModel
+            {
+                PatientID = patient.PatientId,
+                Username = patient.Username,
+                MedicalRecordNumber = patient.MedicalRecordNumber,
+                DateOfBirth = patient.DateOfBirth,
+                Gender = patient.Gender,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Password = user.Password,
-                MedicalRecordNumber = patient.MedicalRecordNumber,
-                DateOfBirth = patient.DateOfBirth ?? DateTime.MinValue, // Handle null value
-                Gender = patient.Gender,
                 Email = user.Email,
                 Phone = user.Phone,
                 Address = user.Address
@@ -163,32 +177,236 @@ namespace PatientMedicalRecord.Controllers
         }
 
 
-
         [HttpPost]
-        public IActionResult Update(EditPatientViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPatient(PatientEditViewModel editModel)
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the user and patient records by username
-                var user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
-                var patient = _context.Patients.FirstOrDefault(p => p.Username == model.Username);
+                // Find the patient by ID
+                var patient = _context.Patients.FirstOrDefault(p => p.PatientId == editModel.PatientID);
 
-                if (user == null || patient == null)
+                if (patient == null)
                 {
-                    // Handle not found user or patient
                     return NotFound();
                 }
 
-                // Update the user and patient data with values from the model
-                // Save changes to the database
+                // Find the associated user by username
+                var user = _context.Users.FirstOrDefault(u => u.Username == editModel.Username);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                // Update patient details
+                patient.MedicalRecordNumber = editModel.MedicalRecordNumber;
+                patient.DateOfBirth = editModel.DateOfBirth;
+                patient.Gender = editModel.Gender;
+
+                // Update user details
+                user.FirstName = editModel.FirstName;
+                user.LastName = editModel.LastName;
+                user.Email = editModel.Email;
+                user.Phone = editModel.Phone;
+                user.Address = editModel.Address;
+
+                // Update both the patient and user records in the context
+                _context.Patients.Update(patient);
+                _context.Users.Update(user);
+
+                // Save the changes
+                _context.SaveChanges();
 
                 return RedirectToAction("PatientList");
             }
 
-            // If the model is not valid, return to the edit form with validation errors
-            return View("EditPatient", model);
+            return View(editModel);
         }
 
+
+        [HttpGet]
+        public IActionResult CreateDoctor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateDoctor(AdminCreateDoctorViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check for duplicate Username, Email, and Phone
+                if (!_context.Users.Any(u => u.Username == model.Username) &&
+                    !_context.Doctors.Any(d => d.LicenseNumber == model.LicenseNumber) &&
+                    !_context.Users.Any(u => u.Email == model.Email) &&
+                    !_context.Users.Any(u => u.Phone == model.Phone))
+                {
+                    // Create a new User record with additional fields
+                    var user = new User
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Username = model.Username,
+                        Password = model.Password,
+                        UserType = "Doctor", // Set UserType to "Doctor" for users associated with doctors
+                        Email = model.Email,
+                        Phone = model.Phone,
+                        Address = model.Address,
+                    };
+
+                    // Create a new Doctor record
+                    var doctor = new Doctor
+                    {
+                        Specialization = model.Specialization,
+                        LicenseNumber = model.LicenseNumber,
+                        Username = model.Username, // Associate the doctor with the created user
+                    };
+
+                    // Add both user and doctor to the context and save changes
+                    _context.Users.Add(user);
+                    _context.Doctors.Add(doctor);
+                    _context.SaveChanges();
+
+                    // Redirect to the admin's doctor list or another page
+                    return RedirectToAction("DoctorList");
+                }
+                else
+                {
+                    // Handle uniqueness constraint violations
+                    ModelState.AddModelError(string.Empty, "One or more fields are not unique.");
+                }
+            }
+
+            // If the model is not valid or uniqueness constraints are violated, return to the form with validation errors
+            return View(model);
+        }
+
+        // Action to list doctors
+        public IActionResult DoctorList()
+        {
+            var doctors = _context.Doctors
+                .Join(_context.Users,
+                      doctor => doctor.Username,
+                      user => user.Username,
+                      (doctor, user) => new DoctorListFromPatientViewModel
+                      {
+                          DoctorID = doctor.DoctorId,
+                          FirstName = user.FirstName,
+                          LastName = user.LastName,
+                          Specialization = doctor.Specialization,
+                          LicenseNumber = doctor.LicenseNumber,
+                          Username = user.Username,
+                          Email = user.Email,
+                          Phone = user.Phone,
+                          Address = user.Address
+                      })
+                .ToList();
+
+            return View(doctors);
+        }
+
+        // Action to delete a doctor
+        public IActionResult DeleteDoctor(int id)
+        {
+            var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorId == id);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Username == doctor.Username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var appointments = _context.Appointments.Where(a => a.DoctorId == id).ToList();
+            var medicalRecords = _context.MedicalRecords.Where(mr => mr.DoctorId == id).ToList();
+
+            _context.Appointments.RemoveRange(appointments);
+            _context.MedicalRecords.RemoveRange(medicalRecords);
+            _context.Doctors.Remove(doctor);
+            _context.Users.Remove(user);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("DoctorList");
+        }
+
+        [HttpGet]
+        public IActionResult EditDoctor(int id)
+        {
+            var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorId == id);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Username == doctor.Username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var editModel = new DoctorEditViewModel
+            {
+                DoctorID = doctor.DoctorId,
+                Username = doctor.Username,
+                Specialization = doctor.Specialization,
+                LicenseNumber = doctor.LicenseNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.Phone,
+                Address = user.Address
+            };
+
+            return View(editModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditDoctor(DoctorEditViewModel editModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorId == editModel.DoctorID);
+
+                if (doctor == null)
+                {
+                    return NotFound();
+                }
+
+                var user = _context.Users.FirstOrDefault(u => u.Username == editModel.Username);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                doctor.Specialization = editModel.Specialization;
+                doctor.LicenseNumber = editModel.LicenseNumber;
+                user.FirstName = editModel.FirstName;
+                user.LastName = editModel.LastName;
+                user.Email = editModel.Email;
+                user.Phone = editModel.Phone;
+                user.Address = editModel.Address;
+
+                _context.Doctors.Update(doctor);
+                _context.Users.Update(user);
+
+                _context.SaveChanges();
+
+                return RedirectToAction("DoctorList");
+            }
+
+            return View(editModel);
+        }
     }
 
 }

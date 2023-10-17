@@ -1,4 +1,4 @@
-﻿@model List<PatientListViewModel>
+﻿@model List<PatientMedicalRecord.Models.PatientListViewModel>
 
 <h2>Patient List</h2>
 
@@ -33,9 +33,9 @@
                 <td>@patient.Phone</td>
                 <td>@patient.Address</td>
                 <td>
-                    @Html.ActionLink("EditPatient", "EditPatient", new { username = patient.Username })
+                    @Html.ActionLink("Edit Patient", "EditPatient", new { id = patient.PatientID })
                     |
-                    @Html.ActionLink("Delete", "Delete", new { id = patient.PatientID })
+                    @Html.ActionLink("Delete Patient", "DeletePatient", new { id = patient.PatientID }, new { onclick = "return confirm('Are you sure you want to delete this patient?');" })
                 </td>
             </tr>
         }

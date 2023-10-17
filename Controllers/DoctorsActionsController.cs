@@ -40,7 +40,7 @@ namespace PatientMedicalRecord.Controllers
         {
             // Search for patients based on Medical Record Number and join with Users table
             var searchResults = _context.Patients
-                .Where(patient => patient.MedicalRecordNumber.Contains(searchInput))
+                .Where(patient => patient.MedicalRecordNumber.Equals(searchInput.ToString()))
                 .Join(
                     _context.Users,
                     patient => patient.Username,
@@ -92,36 +92,68 @@ namespace PatientMedicalRecord.Controllers
 
         public IActionResult CreateMedicalRecord()
         {
-            // Retrieve the doctor's username from the session
-            var doctorUsername = HttpContext.Session.GetString("doctorUsername");
+            return View();
+        }
 
-            // Retrieve the doctor's information from the database
-            var doctor = _context.Doctors.FirstOrDefault(d => d.Username == doctorUsername);
-
-            if (doctor == null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateMedicalRecord(MedicalRecordViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                // Handle the case where the doctor is not found in the database
-                // You can return an error view or perform any other desired action.
-                return View("Error"); // Create an "Error" view for error handling
+                // Retrieve the logged-in doctor's username from the session
+                var doctorUsername = HttpContext.Session.GetString("doctorUsername");
+
+                // Get the doctor's information
+                var doctor = _context.Doctors.FirstOrDefault(d => d.Username == doctorUsername);
+
+                if (doctor != null)
+                {
+                    // Find the patient using their MedicalRecordNumber
+                    var patient = _context.Patients.FirstOrDefault(p => p.MedicalRecordNumber == model.MedicalRecordNumber);
+
+                    if (patient != null)
+                    {
+                        // Create a new MedicalRecord instance
+                        var medicalRecord = new MedicalRecord
+                        {
+                            DoctorId = doctor.DoctorId,
+                            PatientId = patient.PatientId,
+                            DateOfVisit = model.DateOfVisit,
+                            Diagnosis = model.Diagnosis,
+                            Treatment = model.Treatment,
+                            Prescription = model.Prescription
+                            // Set other properties as needed
+                        };
+
+                        // Add the medical record to the context and save changes
+                        _context.MedicalRecords.Add(medicalRecord);
+                        _context.SaveChanges();
+
+                        // Redirect to a success page or take other appropriate actions
+                        return RedirectToAction("MedicalRecordCreated");
+                    }
+                    else
+                    {
+                        // Handle the case where the patient with the provided MedicalRecordNumber is not found
+                        ModelState.AddModelError(string.Empty, "Patient not found. Please check the Medical Record Number.");
+                    }
+                }
+                else
+                {
+                    // Handle the case where the doctor is not found
+                    ModelState.AddModelError(string.Empty, "Doctor not found. Please log in again.");
+                }
             }
 
-            // Create a new instance of the MedicalRecord model
-            var newMedicalRecord = new MedicalRecord
-            {
-                // Set the DoctorID to the ID of the logged-in doctor
-                DoctorId = doctor.DoctorId,
-                // Initialize other properties as needed
-                DateOfVisit = DateTime.Now, // For example, set the visit date to the current date
-            };
+            return View(model);
+        }
 
-            // You can add more properties to the MedicalRecord as needed
-
-            // Save the new medical record to the database
-            _context.MedicalRecords.Add(newMedicalRecord);
-            _context.SaveChanges();
-
-            // Redirect to a success or confirmation page
-            return View("CreateMedicalRecordConfirmation"); // Create a "CreateMedicalRecordConfirmation" view
+        public IActionResult MedicalRecordCreated()
+        {
+            // Set a success message in TempData to be displayed in the view
+            TempData["SuccessMessage"] = "Medical record created successfully";
+            return View();
         }
 
 

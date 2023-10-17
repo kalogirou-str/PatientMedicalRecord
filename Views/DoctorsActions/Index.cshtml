@@ -2,8 +2,26 @@
 <html>
 <head>
     <title>Welcome</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide scroll bars */
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind other content */
+        }
+    </style>
 </head>
 <body>
+    <img class="background-image" src="~/BackgroundImages/doctor_background_image.jpg" alt="Background Image">
+
     <h1>Hello, @ViewBag.User.FirstName @ViewBag.User.LastName</h1>
 
     <!-- Add links to various actions -->
