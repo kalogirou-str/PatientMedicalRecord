@@ -75,7 +75,6 @@ namespace PatientMedicalRecord.Controllers
                     _context.Patients.Add(patient);
                     _context.SaveChanges();
 
-                    // Redirect to the admin's patient list or another page
                     return RedirectToAction("PatientList");
                 }
                 else
@@ -102,7 +101,7 @@ namespace PatientMedicalRecord.Controllers
                           FirstName = user.FirstName,
                           LastName = user.LastName,
                           MedicalRecordNumber = patient.MedicalRecordNumber,
-                          DateOfBirth = patient.DateOfBirth ?? DateTime.MinValue, // Handle null value
+                          DateOfBirth = patient.DateOfBirth ?? DateTime.MinValue, 
                           Gender = patient.Gender,
                           Username = user.Username,
                           Email = user.Email,
@@ -144,7 +143,7 @@ namespace PatientMedicalRecord.Controllers
                 _context.Users.Remove(user);
             }
 
-            // Save the changes
+            // Save the changes in the Database
             _context.SaveChanges();
 
             return RedirectToAction("PatientList");
@@ -154,7 +153,6 @@ namespace PatientMedicalRecord.Controllers
         [HttpGet]
         public IActionResult EditPatient(int id)
         {
-            // Find the patient by ID
             var patient = _context.Patients.FirstOrDefault(p => p.PatientId == id);
 
             if (patient == null)
@@ -162,7 +160,7 @@ namespace PatientMedicalRecord.Controllers
                 return NotFound();
             }
 
-            // Find the associated user by username
+            // Find the associaed user by username
             var user = _context.Users.FirstOrDefault(u => u.Username == patient.Username);
 
             if (user == null)
@@ -194,7 +192,6 @@ namespace PatientMedicalRecord.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Find the patient by ID
                 var patient = _context.Patients.FirstOrDefault(p => p.PatientId == editModel.PatientID);
 
                 if (patient == null)
@@ -247,7 +244,6 @@ namespace PatientMedicalRecord.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check for duplicate Username, Email, and Phone
                 if (!_context.Users.Any(u => u.Username == model.Username) &&
                     !_context.Doctors.Any(d => d.LicenseNumber == model.LicenseNumber) &&
                     !_context.Users.Any(u => u.Email == model.Email) &&

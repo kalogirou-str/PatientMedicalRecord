@@ -51,21 +51,20 @@ namespace PatientMedicalRecord.Controllers
                 return View(appointments);
             }
 
-            // Handle the case where the patient is not found
-            // You can redirect to an error page or show a message
+            
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult CancelAppointment(int patientId, int doctorId, DateTime appointmentDate)
         {
-            // Retrieve the appointment based on the provided values
+            
             var appointment = _context.Appointments
                 .FirstOrDefault(a => a.PatientId == patientId && a.DoctorId == doctorId && a.AppointmentDate == appointmentDate);
 
             if (appointment != null)
             {
-                // Remove the appointment from the context and mark it for deletion
+                
                 _context.Appointments.Remove(appointment);
                 _context.SaveChanges(); // Save changes to delete the appointment
 
@@ -73,18 +72,17 @@ namespace PatientMedicalRecord.Controllers
                 return RedirectToAction("Appointments");
             }
 
-            // Handle the case where the appointment is not found
-            // You can redirect to an error page or show a message
+            
             return RedirectToAction("Appointments");
         }
 
 
         public IActionResult MedicalRecords()
         {
-            // Retrieve the username from the session using the correct key
+            
             var username = HttpContext.Session.GetString("patientUsername");
 
-            // Query the database to retrieve the patient's medical records
+            
             var patient = _context.Patients.FirstOrDefault(p => p.Username == username);
 
             // Ensure the patient exists
@@ -98,8 +96,7 @@ namespace PatientMedicalRecord.Controllers
                 return View(medicalRecords);
             }
 
-            // Handle the case where the patient is not found
-            // You can redirect to an error page or show a message
+            
             return RedirectToAction("Index");
         }
 
@@ -123,7 +120,7 @@ namespace PatientMedicalRecord.Controllers
         [HttpPost]
         public IActionResult CreateAppointment(int DoctorID, DateTime AppointmentDate, string? Notes)
         {
-            // Retrieve the username from the session using the correct key
+            
             var username = HttpContext.Session.GetString("patientUsername");
 
             // Find the patient based on the username
@@ -154,11 +151,11 @@ namespace PatientMedicalRecord.Controllers
                         appointment.Status = "Pending";
                     }
 
-                    // The database will automatically generate the AppointmentID
+                    
                     _context.Appointments.Add(appointment);
                     _context.SaveChanges();
 
-                    // Redirect to the appointments list or a success page
+                    
                     return RedirectToAction("Appointments");
                 }
             }

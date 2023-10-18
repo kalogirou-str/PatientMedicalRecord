@@ -10,7 +10,7 @@
             <th>Notes</th>
             <th>Medical Record Number</th>
             <th>Patient Name</th>
-            <th>Action</th> <!-- Add a new column for actions -->
+            <th>Action</th> 
         </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
         {
             <tr>
                 <td>@appointment.AppointmentDate.ToShortDateString() @appointment.AppointmentDate.ToShortTimeString()</td>
-                <td>@appointment.Status</td> <!-- Display status as plain text -->
+                <td>@appointment.Status</td> 
                 <td><span style="color: #0066cc">@appointment.Notes</span></td>
                 <td>@appointment.MedicalRecordNumber</td>
                 <td>@appointment.FirstName @appointment.LastName</td>

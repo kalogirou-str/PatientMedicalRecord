@@ -17,7 +17,7 @@
                     <th>Last Name</th>
                     <th>Date of Birth</th>
                     <th>Gender</th>
-                    <!-- Add more patient details -->
+                    
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
                         <td>@result.LastName</td>
                         <td>@result.DateOfBirth</td>
                         <td>@result.Gender</td>
-                        <!-- Display more properties as needed -->
+                        
                         <td>
                             <a asp-controller="DoctorsActions" asp-action="ViewMedicalRecord" asp-route-patientId="@result.PatientID">View Medical Record</a>
                         </td>

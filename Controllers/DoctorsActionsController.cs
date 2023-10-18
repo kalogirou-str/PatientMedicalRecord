@@ -17,7 +17,7 @@ namespace PatientMedicalRecord.Controllers
             // Retrieve the username from the session using the correct key
             var username = HttpContext.Session.GetString("doctorUsername");
 
-            // Query the database to retrieve user and patient details
+            
             var user = _context.Users.FirstOrDefault(u => u.Username == username);
             var doctor = _context.Doctors.FirstOrDefault(p => p.Username == username);
 
@@ -31,14 +31,14 @@ namespace PatientMedicalRecord.Controllers
 
         public IActionResult SearchPatients()
         {
-            return View(); // Display the search form
+            return View();
         }
 
 
         [HttpPost]
         public IActionResult SearchResults(string searchInput)
         {
-            // Search for patients based on Medical Record Number and join with Users table
+            // Search for patients basd on Medical Record Number and join with Users table
             var searchResults = _context.Patients
                 .Where(patient => patient.MedicalRecordNumber.Equals(searchInput.ToString()))
                 .Join(
@@ -52,7 +52,7 @@ namespace PatientMedicalRecord.Controllers
                         LastName = user.LastName,
                         DateOfBirth = patient.DateOfBirth,
                         Gender = patient.Gender
-                        // Add more properties here
+                        
                     }
                 )
                 .ToList();
@@ -135,7 +135,6 @@ namespace PatientMedicalRecord.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the logged-in doctor's username from the session
                 var doctorUsername = HttpContext.Session.GetString("doctorUsername");
 
                 // Get the doctor's information
@@ -157,7 +156,7 @@ namespace PatientMedicalRecord.Controllers
                             Diagnosis = model.Diagnosis,
                             Treatment = model.Treatment,
                             Prescription = model.Prescription
-                            // Set other properties as needed
+                            
                         };
 
                         // Add the medical record to the context and save changes

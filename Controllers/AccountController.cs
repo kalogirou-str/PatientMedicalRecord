@@ -24,6 +24,7 @@ namespace PatientMedicalRecord.Controllers
             return View();
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password)
@@ -69,6 +70,14 @@ namespace PatientMedicalRecord.Controllers
                     return RedirectToAction("Login");
                 }
             }
+        }
+
+        public IActionResult Logout()
+        {
+            // Clear the session
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login");
         }
     }
 }
