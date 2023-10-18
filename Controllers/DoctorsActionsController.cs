@@ -83,12 +83,46 @@ namespace PatientMedicalRecord.Controllers
                     Notes = a.Notes,
                     MedicalRecordNumber = a.Patient.MedicalRecordNumber,
                     FirstName = _context.Users.Single(u => u.Username == a.Patient.Username).FirstName,
-                    LastName = _context.Users.Single(u => u.Username == a.Patient.Username).LastName
+                    LastName = _context.Users.Single(u => u.Username == a.Patient.Username).LastName,
+                    PatientId = a.PatientId,
+                    DoctorId = a.DoctorId
                 })
                 .ToList();
 
             return View(upcomingAppointments);
         }
+
+        [HttpPost]
+        public IActionResult AcceptAppointment(int patientId, int doctorId, DateTime appointmentDate)
+        {
+            var appointment = _context.Appointments
+                .FirstOrDefault(a => a.PatientId == patientId && a.DoctorId == doctorId && a.AppointmentDate == appointmentDate);
+
+            if (appointment != null && appointment.Status == "Pending")
+            {
+                appointment.Status = "Scheduled";
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("UpcomingAppointments");
+        }
+
+        [HttpPost]
+        public IActionResult RejectAppointment(int patientId, int doctorId, DateTime appointmentDate)
+        {
+            var appointment = _context.Appointments
+                .FirstOrDefault(a => a.PatientId == patientId && a.DoctorId == doctorId && a.AppointmentDate == appointmentDate);
+
+            if (appointment != null)
+            {
+                _context.Appointments.Remove(appointment);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("UpcomingAppointments");
+        }
+
+
 
         public IActionResult CreateMedicalRecord()
         {

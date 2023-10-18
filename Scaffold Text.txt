@@ -1,0 +1,1 @@
+dScaffold-DbContext -f "Server=LAPTOP-N0QM39O5;Database=MedicalRecordsDB;Trusted_Connection=True;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context "MedicalRecordsDBContext" -DataAnnotations

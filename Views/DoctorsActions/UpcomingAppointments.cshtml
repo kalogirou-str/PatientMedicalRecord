@@ -2,54 +2,45 @@
 
 <h2>Upcoming Appointments</h2>
 
-
-<head>
-    <title>Create Medical Record</title>
-</head>
-
-
-<body>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Appointment Date</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th>Medical Record Number</th>
-                <th>Patient Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var appointment in Model)
-            {
-                <tr>
-                    <td>@appointment.AppointmentDate.ToShortDateString() @appointment.AppointmentDate.ToShortTimeString()</td>
-                    <td><span style="color: @GetStatusColor(appointment.Status)">@appointment.Status</span></td>
-                    <td><span style="color: #0066cc">@appointment.Notes</span></td>
-                    <td>@appointment.MedicalRecordNumber</td>
-                    <td>@appointment.FirstName @appointment.LastName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    @functions {
-        // Function to get status-specific color
-        string GetStatusColor(string status)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Appointment Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Medical Record Number</th>
+            <th>Patient Name</th>
+            <th>Action</th> <!-- Add a new column for actions -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
         {
-            switch (status)
-            {
-                case "Pending":
-                    return "orange";
-                case "Confirmed":
-                    return "green";
-                case "Cancelled":
-                    return "red";
-                default:
-                    return "black";
-            }
+            <tr>
+                <td>@appointment.AppointmentDate.ToShortDateString() @appointment.AppointmentDate.ToShortTimeString()</td>
+                <td>@appointment.Status</td> <!-- Display status as plain text -->
+                <td><span style="color: #0066cc">@appointment.Notes</span></td>
+                <td>@appointment.MedicalRecordNumber</td>
+                <td>@appointment.FirstName @appointment.LastName</td>
+                <td>
+                    @if (appointment.Status == "Pending")
+                    {
+                        <form asp-action="AcceptAppointment" method="post">
+                            <input type="hidden" name="patientId" value="@appointment.PatientId" />
+                            <input type="hidden" name="doctorId" value="@appointment.DoctorId" />
+                            <input type="hidden" name="appointmentDate" value="@appointment.AppointmentDate" />
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form asp-action="RejectAppointment" method="post">
+                            <input type="hidden" name="patientId" value="@appointment.PatientId" />
+                            <input type="hidden" name="doctorId" value="@appointment.DoctorId" />
+                            <input type="hidden" name="appointmentDate" value="@appointment.AppointmentDate" />
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    }
+                </td>
+            </tr>
         }
-    }
-</body>
-
+    </tbody>
+</table>
+s

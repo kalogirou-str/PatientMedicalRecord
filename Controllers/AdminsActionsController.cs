@@ -124,6 +124,9 @@ namespace PatientMedicalRecord.Controllers
                 return NotFound();
             }
 
+            // Get the Username associated with the patient
+            string username = patient.Username;
+
             // Delete the associated appointments and medical records
             var appointments = _context.Appointments.Where(a => a.PatientId == id).ToList();
             var medicalRecords = _context.MedicalRecords.Where(mr => mr.PatientId == id).ToList();
@@ -134,11 +137,19 @@ namespace PatientMedicalRecord.Controllers
             // Remove the patient from the Patients table
             _context.Patients.Remove(patient);
 
+            // Remove the corresponding User from the Users table
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+            }
+
             // Save the changes
             _context.SaveChanges();
 
             return RedirectToAction("PatientList");
         }
+
 
         [HttpGet]
         public IActionResult EditPatient(int id)

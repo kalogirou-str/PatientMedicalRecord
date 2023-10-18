@@ -14,6 +14,7 @@ namespace PatientMedicalRecord.Controllers
             _context = context;
         }
 
+
         public IActionResult Index()
         {
             // Retrieve the username from the session using the correct key
